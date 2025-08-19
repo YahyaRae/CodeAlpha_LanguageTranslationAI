@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRANSLATE</title>
+    <style>
+        /* Global Reset & Base Styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-color-main: #140d21;
+            --bg-color-gradient-1: #2a1b41;
+            --bg-color-gradient-2: #1e1136;
+            --primary-color: #00e0ff;
+            --primary-glow: #00d2ff80;
+            --text-color: #e0e0f0;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --border-radius-large: 24px;
+            --border-radius-small: 12px;
+            --shadow-primary: 0 0 15px rgba(0, 224, 255, 0.2), 0 0 30px rgba(0, 224, 255, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: radial-gradient(circle at top right, var(--bg-color-gradient-1), transparent 50%),
+                        radial-gradient(circle at bottom left, var(--bg-color-gradient-2), transparent 50%),
+                        var(--bg-color-main);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 24px;
+            font-size: 16px;
+            overflow: hidden;
+            animation: background-pulse 10s infinite alternate;
+        }
+
+        @keyframes background-pulse {
+            from { background-position: 0% 0%; }
+            to { background-position: 100% 100%; }
+        }
+
+        /* Container and Layout */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 900px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 8px 32px 0 var(--shadow-color);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+            }
+        }
+
+        /* Heading */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #00e0ff, #9f5bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+        }
+
+        /* Main Translation Area */
+        .translation-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .translation-grid {
+                grid-template-columns: 1fr 60px 1fr;
+            }
+        }
+
+        .input-group, .output-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Language Selectors and Textareas */
+        select, textarea {
+            width: 100%;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-small);
+            padding: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            color: var(--text-color);
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(0, 224, 255, 0.3);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+            max-height: 400px;
+        }
+        
+        select option {
+            background-color: var(--bg-color-main);
+            color: var(--text-color);
+        }
+
+        /* Swap Button */
+        .swap-button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .swap-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: var(--bg-color-main);
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+            box-shadow: var(--shadow-primary);
+            margin: 10px 0;
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 10px rgba(0, 224, 255, 0.3); }
+            to { box-shadow: 0 0 20px rgba(0, 224, 255, 0.6); }
+        }
+
+        .swap-button:hover {
+            background: var(--primary-light);
+            transform: rotate(360deg) scale(1.05);
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+        
+        @media (min-width: 768px) {
+            .swap-button {
+                margin: 0;
+            }
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .action-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-color);
+            border-radius: var(--border-radius-small);
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--bg-color-main);
+            box-shadow: var(--shadow-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Main Translate Button */
+        .translate-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(45deg, #00e0ff, #9f5bff);
+            color: var(--bg-color-main);
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 224, 255, 0.3);
+            text-transform: uppercase;
+        }
+
+        .translate-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 224, 255, 0.4);
+            background: linear-gradient(45deg, #9f5bff, #00e0ff);
+        }
+
+        .translate-button:disabled {
+            background: #888;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Status and Messages */
+        .status-message {
+            padding: 12px;
+            border-radius: var(--border-radius-small);
+            font-weight: 500;
+            text-align: center;
+            margin-top: 10px;
+            animation: show-message 0.4s ease-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @keyframes show-message {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .loading {
+            background-color: #00838f;
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 131, 143, 0.5);
+        }
+
+        .success {
+            background-color: #2e7d32;
+            color: white;
+        }
+
+        .error {
+            background-color: #c62828;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="header-title">TRANSLATE</h1>
+        </div>
+        
+        <div class="translation-grid">
+            <div class="input-group">
+                <select id="sourceLanguage">
+                    {% for code, name in languages.items() %}
+                    <option value="{{ code }}" {% if code == 'auto' %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+                <textarea 
+                    id="inputText" 
+                    placeholder="Enter text..."
+                ></textarea>
+            </div>
+
+            <div class="swap-button-container">
+                <button class="swap-button" id="swapButton" title="Swap languages">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-repeat"><polyline points="17 1 21 5 17 9"></polyline><path d="M21 5H9a4 4 0 0 0-4 4v2"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M3 19h12a4 4 0 0 0 4-4v-2"></path></svg>
+                </button>
+            </div>
+
+            <div class="output-group">
+                <select id="targetLanguage">
+                    {% for code, name in languages.items() %}
+                    {% if code != 'auto' %}
+                    <option value="{{ code }}" {% if code == 'en' %}selected{% endif %}>{{ name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <textarea 
+                    id="outputText" 
+                    placeholder="Translation..."
+                    readonly
+                ></textarea>
+                <div class="action-buttons">
+                    <button class="action-btn" id="copyButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy
+                    </button>
+                    <button class="action-btn" id="speakButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        Speak
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <button class="translate-button" id="translateButton">
+            TRANSLATE
+        </button>
+
+        <div id="statusMessages">
+            <div class="status-message loading" id="loading" style="display: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-loader"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+                Translating...
+            </div>
+            <div class="status-message success" id="success" style="display: none;"></div>
+            <div class="status-message error" id="error" style="display: none;"></div>
+        </div>
+    </div>
+    <script>
+        class PythonTranslationTool {
+            constructor() {
+                this.initializeElements();
+                this.bindEvents();
+                this.updateCharCount();
+                this.checkServerStatus();
+            }
+
+            initializeElements() {
+                this.sourceLanguage = document.getElementById('sourceLanguage');
+                this.targetLanguage = document.getElementById('targetLanguage');
+                this.inputText = document.getElementById('inputText');
+                this.outputText = document.getElementById('outputText');
+                this.translateButton = document.getElementById('translateButton');
+                this.swapButton = document.getElementById('swapButton');
+                this.copyButton = document.getElementById('copyButton');
+                this.speakButton = document.getElementById('speakButton');
+                this.clearButton = document.getElementById('clearButton');
+                this.loading = document.getElementById('loading');
+                this.error = document.getElementById('error');
+                this.success = document.getElementById('success');
+                this.charCount = document.getElementById('charCount');
+                this.statusIndicator = document.getElementById('statusIndicator');
+            }
+
+            bindEvents() {
+                this.translateButton.addEventListener('click', () => this.translate());
+                this.swapButton.addEventListener('click', () => this.swapLanguages());
+                this.copyButton.addEventListener('click', () => this.copyToClipboard());
+                this.speakButton.addEventListener('click', () => this.speakText());
+                this.clearButton.addEventListener('click', () => this.clearAll());
+                this.inputText.addEventListener('input', () => this.updateCharCount());
+                this.inputText.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && e.ctrlKey) {
+                        this.translate();
+                    }
+                });
+            }
+
+            async checkServerStatus() {
+                try {
+                    const response = await fetch('/languages');
+                    if (response.ok) {
+                        this.statusIndicator.style.display = 'block';
+                        this.statusIndicator.style.background = '#4caf50';
+                        this.statusIndicator.textContent = '  Server Connected';
+                        setTimeout(() => {
+                            this.statusIndicator.style.display = 'none';
+                        }, 3000);
+                    }
+                } catch (error) {
+                    this.statusIndicator.style.display = 'block';
+                    this.statusIndicator.style.background = '#f44336';
+                    this.statusIndicator.textContent = 'Server Disconnected';
+                }
+            }
+
+            updateCharCount() {
+                const count = this.inputText.value.length;
+                this.charCount.textContent = count;
+                
+                if (count > 4500) {
+                    this.charCount.style.color = '#ff6b6b';
+                } else if (count > 4000) {
+                    this.charCount.style.color = '#feca57';
+                } else {
+                    this.charCount.style.color = '#666';
+                }
+            }
+
+            async translate() {
+                const text = this.inputText.value.trim();
+                if (!text) {
+                    this.showError('Please enter text to translate');
+                    return;
+                }
+
+                const sourceLang = this.sourceLanguage.value;
+                const targetLang = this.targetLanguage.value;
+
+                if (sourceLang === targetLang && sourceLang !== 'auto') {
+                    this.showError('Source and target languages cannot be the same');
+                    return;
+                }
+
+                this.showLoading(true);
+                this.hideMessages();
+
+                try {
+                    const response = await fetch('/translate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            text: text,
+                            source_lang: sourceLang,
+                            target_lang: targetLang
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.outputText.value = data.translated_text;
+                        this.showSuccess('Translation completed successfully!');
+                        this.animateOutput();
+                    } else {
+                        this.showError(data.error || 'Translation failed');
+                    }
+                } catch (error) {
+                    this.showError(`Network error: ${error.message}`);
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            swapLanguages() {
+                if (this.sourceLanguage.value === 'auto') {
+                    this.showError('Cannot swap when auto-detect is selected');
+                    return;
+                }
+
+                const sourceValue = this.sourceLanguage.value;
+                const targetValue = this.targetLanguage.value;
+                const inputValue = this.inputText.value;
+                const outputValue = this.outputText.value;
+
+                this.sourceLanguage.value = targetValue;
+                this.targetLanguage.value = sourceValue;
+                this.inputText.value = outputValue;
+                this.outputText.value = inputValue;
+
+                this.updateCharCount();
+            }
+
+            async copyToClipboard() {
+                const text = this.outputText.value;
+                if (!text) {
+                    this.showError('No translation to copy');
+                    return;
+                }
+
+                try {
+                    await navigator.clipboard.writeText(text);
+                    this.showSuccess('Copied to clipboard!');
+                } catch (error) {
+                    this.outputText.select();
+                    document.execCommand('copy');
+                    this.showSuccess('Copied to clipboard!');
+                }
+            }
+
+            speakText() {
+                const text = this.outputText.value;
+                if (!text) {
+                    this.showError('No translation to speak');
+                    return;
+                }
+
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = this.getLanguageCode(this.targetLanguage.value);
+                    utterance.rate = 0.8;
+                    utterance.pitch = 1;
+                    
+                    speechSynthesis.speak(utterance);
+                    this.showSuccess('Speaking translation...');
+                } else {
+                    this.showError('Text-to-speech not supported in this browser');
+                }
+            }
+
+            clearAll() {
+                this.inputText.value = '';
+                this.outputText.value = '';
+                this.updateCharCount();
+                this.hideMessages();
+                this.inputText.focus();
+            }
+
+            getLanguageCode(code) {
+                const langMap = {
+                    'en': 'en-US',
+                    'es': 'es-ES',
+                    'fr': 'fr-FR',
+                    'de': 'de-DE',
+                    'it': 'it-IT',
+                    'pt': 'pt-PT',
+                    'ru': 'ru-RU',
+                    'ja': 'ja-JP',
+                    'ko': 'ko-KR',
+                    'zh': 'zh-CN',
+                    'ar': 'ar-SA',
+                    'hi': 'hi-IN'
+                };
+                return langMap[code] || code;
+            }
+
+            showLoading(show) {
+                this.loading.style.display = show ? 'flex' : 'none';
+                this.translateButton.disabled = show;
+                if (show) {
+                    this.translateButton.textContent = 'Translating...';
+                } else {
+                    this.translateButton.textContent = 'Translate ';
+                }
+            }
+
+            showError(message) {
+                this.error.textContent = message;
+                this.error.style.display = 'block';
+                setTimeout(() => this.hideMessages(), 5000);
+            }
+
+            showSuccess(message) {
+                this.success.textContent = message;
+                this.success.style.display = 'block';
+                setTimeout(() => this.hideMessages(), 3000);
+            }
+
+            hideMessages() {
+                this.error.style.display = 'none';
+                this.success.style.display = 'none';
+            }
+
+            animateOutput() {
+                this.outputText.style.transform = 'scale(0.95)';
+                this.outputText.style.transition = 'transform 0.2s ease';
+                setTimeout(() => {
+                    this.outputText.style.transform = 'scale(1)';
+                }, 100);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new PythonTranslationTool();
+        });
+    </script>
+</body>
+</html>
