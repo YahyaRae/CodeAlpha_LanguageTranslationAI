@@ -3,7 +3,7 @@
   
 Responsive web-based translation tool built with Flask and vanilla JavaScript. Features a beautiful glassmorphism UI with smooth animations and comprehensive translation capabilities.
 
-![image_alt]([https://github.com/adiii6969/codealpha_tasks-Language-Translation-Tool/blob/0aefc008b0c5395daf0d61394e4271522e660a6d/screenshot.png](https://github.com/YahyaRae/CodeAlpha_LanguageTranslationAI/blob/b53235a723a1a9b068466d382240686ea6d5d01d/Screenshot%202025-08-19%20at%201.15.41%20PM.png))
+![image_alt](Screenshot 2025-08-19 at 1.15.41 PM.png)
 **Features**
 
 Multi-language Support: 20+ languages including English, Spanish, French, German, Arabic, Hindi, Chinese, and more
